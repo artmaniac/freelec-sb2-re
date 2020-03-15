@@ -19,12 +19,16 @@ script: "./gradlew clean build"
 
 
 before_deploy:
-  - zip -r freelec-sb2 *
-  - mkdir -p deploy
-  - mv freelec-sb2.zip deploy/freelec-sb2.zip
-  #- zip -r freelec-springboot2-webservice *
+  #- zip -r freelec-sb2 *
   #- mkdir -p deploy
-  #- mv freelec-springboot2-webservice.zip deploy/freelec-springboot2-webservice.zip-
+  #- mv freelec-sb2.zip deploy/freelec-sb2.zip
+  - mkdir -p before-deploy
+  - cp scripts/*.sh before-deploy/
+  - cp appspec.yml before-deploy/
+  - cp build/libs/*.jar before-deploy/
+  - cp before-deploy && zip -r before-deploy * #  before-deploy 로 이동후 전체 압축
+  - cd ../ && mkdir -p deploy
+  - mv before-deploy/before-deploy.zip deploy/freelec-sb2.zip
 
 deploy:
   - provider: s3
